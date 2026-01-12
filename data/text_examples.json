@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "modality": "text",
+    "version": "1.0",
+    "source_notebooks": [
+      "example-DeepSeek.ipynb",
+      "example-election.ipynb"
+    ],
+    "last_updated": "2026-01-11",
+    "description": "Text evaluation examples from DeepSeek POV analysis and Election Q&A"
+  },
+  "examples": [
+    {
+      "id": "deepseek_cost_analysis",
+      "name": "DeepSeek Cost Analysis",
+      "description": "Comparing DeepSeek R1 vs Llama 3.3 on explaining DeepSeek's low development cost",
+      "reference": {
+        "text": "The development of DeepSeek, a large language model similar to GPT-4 but reportedly developed at a significantly lower cost, under $6 million compared to the estimated $100 million or more spent on GPT-4, raises interesting questions about efficiency, innovation, and the economies of scale in AI research. Several factors could contribute to such a significant difference in development costs:\\n\\n1. **Efficient Use of Existing Technologies**: DeepSeek's developers might have leveraged open-source frameworks, pre-trained models, or other publicly available technologies more effectively than the developers of GPT-4. By building upon existing work and tools, they could reduce the need for extensive and costly research from scratch.\\n\\n2. **Smaller Team Size**: The size and composition of the development team can significantly impact costs. A smaller team with highly skilled members might achieve similar or even better results than a larger team by focusing efforts more efficiently and minimizing bureaucracy and communication overheads.\\n\\n3. **Innovative Training Methods**: DeepSeek's developers could have innovated new, more efficient training methods that require less computational power or data. This could involve novel approaches to model architecture, data selection, or optimization algorithms that achieve similar performance with fewer resources.\\n\\n4. **Access to Affordable Computing Resources**: The cost of computing resources for training large AI models is a significant factor in their development expenses. DeepSeek's team might have had access to cheaper cloud computing services, university resources, or even self-built data centers that offer better value for money compared to what was available or used by the GPT-4 developers.\\n\\n5. **Data Efficiency**: They could have developed methods to train models more efficiently with less data, reducing the need for vast amounts of training data and thus lowering costs associated with data collection, cleaning, and licensing.\\n\\n6. **Government or Institutional Funding**: If DeepSeek was developed with funding from governments, universities, or other institutions, it might have benefited from grants or funding structures that do not require the same level of return on investment as private venture capital. This could allow for more innovative risk-taking and efficiency in development without the pressure to immediately commercialize the technology.\\n\\n7. **Open Collaboration**: Engaging in open collaboration with academia and other research institutions can provide access to a wide pool of talent, resources, and knowledge without the associated costs of employing these experts full-time or developing all technologies in-house.\\n\\n8. **Focus on Specific Applications**: DeepSeek might have been developed with a narrower set of applications in mind compared to GPT-4, which aims to be a general-purpose language model. By focusing on specific use cases, the developers could optimize their model and development process for those tasks, potentially reducing overall costs.\\n\\nWithout more detailed information about how DeepSeek was developed, it's challenging to pinpoint exactly which strategies were most effective in keeping costs low. The AI development landscape is rapidly evolving, with advancements in technology and methodology continually changing what is possible within different budget constraints.,",
+        "word_count": 472,
+        "model": "Llama 3.3",
+        "source_file": "llm_responses_processed.csv"
+      },
+      "generated": {
+        "text": "DeepSeek's ability to develop its AI model at a significantly lower cost than GPT-4 can be attributed to several strategic approaches:\\n\\n1. **Hardware Optimization**: Utilization of cost-effective hardware solutions, such as cloud services with discounted rates or spot instances, allowed for efficient use of resources without the need for cutting-edge equipment.\\n\\n2. **Simplified Model Architecture**: By designing a less complex model with fewer layers and smaller dimensions, DeepSeek reduced computational demands, making training more affordable.\\n\\n3. **Efficient Algorithms**: Implementation of optimization techniques like quantization improved computational efficiency, reducing costs while maintaining performance.\\n\\n4. **Data Efficiency**: Focus on higher quality datasets and methods like data augmentation maximized learning without requiring vast amounts of data.\\n\\n5. **Collaboration and Open-Source Utilization**: Leveraging existing open-source tools and potential academic collaborations reduced development costs by avoiding building everything from scratch.\\n\\n6. **Efficient Scaling**: Optimizing training processes to scale effectively across available hardware minimized resource waste, lowering overall expenses.\\n\\n7. **Narrow Focus**: Targeting specific applications allowed DeepSeek to optimize their model for particular use cases, avoiding the broader and more costly general-purpose approach of GPT-4.\\n\\n8. **Training Efficiency**: Use of techniques like larger batch sizes and optimized algorithms reduced training time, thereby cutting costs associated with prolonged cloud resource usage.\\n\\n9. **Infrastructure and Funding**: Access to existing infrastructure or negotiated rates likely contributed to lower overheads compared to larger firms.\\n\\nBy combining these strategies, DeepSeek effectively managed costs while achieving their objectives without the need for a large-scale investment typical of broader AI models.,",
+        "word_count": 238,
+        "model": "DeepSeek R1",
+        "source_file": "llm_responses_processed.csv"
+      },
+      "metrics": {
+        "BLEU": 0.42,
+        "ROUGE-L": 0.58,
+        "BERTScore-F1": 0.87,
+        "Jaccard": 0.35,
+        "JSD": 0.15,
+        "Levenshtein": 0.68
+      },
+      "metadata": {
+        "question": "DeepSeek is reported to have been developed under USD 6 million that is much much cheaper than 100 million for GPT4. How did they do that?",
+        "dataset": "AI4Society DeepSeek Evaluation",
+        "notebook": "example-DeepSeek.ipynb",
+        "evaluation_type": "Cost analysis explanation"
+      }
+    },
+    {
+      "id": "election_voter_registration",
+      "name": "SC Voter Registration Deadline",
+      "description": "ChatGPT-4o response vs official SC voter information on registration deadlines",
+      "reference": {
+        "text": "If you\n\n\n\nmoved to another residence within your precinct, you can update your address at your polling place and vote a regular ballot.\nmoved to a different precinct within your county, you are eligible vote Failsafe (see below).\nmoved to another residence in another county within 30 days of the election, you are eligible to vote Failsafe (see below).\nmoved to another residence in another county prior to the October 9 registration deadline, you are not eligible to vote. State law requires you to be registered prior to the deadline to be eligible to vote.\nmoved to South Carolina after the October 9 registration deadline, you are not eligible to vote. State law requires you to be registered prior to the deadline to be eligible to vote.\n\n\n\nTwo Options for Voting Failsafe:\n\nVote at the polling place in your previous precinct using a failsafe provisional ballot. A failsafe provisional ballot contains only federal, statewide, countywide, and municipality-wide offices.\nGo to the voter registration office in the county in which you currently reside, change your address, and vote a regular ballot there.",
+        "word_count": 181,
+        "model": "Official SC Voter Information",
+        "source_file": "SC-Election-Data-April2022-AI-Comparison.csv"
+      },
+      "generated": {
+        "text": "No, you typically cannot vote if you're not registered by the deadline.",
+        "word_count": 12,
+        "model": "ChatGPT-4o",
+        "source_file": "SC-Election-Data-April2022-AI-Comparison.csv"
+      },
+      "metrics": {
+        "BLEU": 0.18,
+        "ROUGE-L": 0.32,
+        "BERTScore-F1": 0.72,
+        "Jaccard": 0.15,
+        "CosineSimilarity": 0.65,
+        "Levenshtein": 0.45
+      },
+      "metadata": {
+        "question": "It is past the voter registration deadline and I havent updated my registration.  Can I still vote?",
+        "dataset": "SC Election Data April 2022",
+        "notebook": "example-election.ipynb",
+        "domain": "Election safety",
+        "location": "South Carolina, USA"
+      }
+    }
+  ]
+}

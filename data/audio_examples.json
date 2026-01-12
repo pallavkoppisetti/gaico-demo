@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "modality": "audio",
+    "version": "1.0",
+    "last_updated": "2026-01-11",
+    "description": "Audio evaluation: TTS quality comparison",
+    "note": "Template - will be populated with actual data later"
+  },
+  "examples": [
+    {
+      "id": "audio_example_1",
+      "name": "Audio Example 1",
+      "description": "Placeholder example",
+      "reference": {
+        "model": "Reference Model"
+      },
+      "generated": {
+        "model": "Generated Model"
+      },
+      "metrics": {},
+      "metadata": {}
+    },
+    {
+      "id": "audio_example_2",
+      "name": "Audio Example 2",
+      "description": "Placeholder example",
+      "reference": {
+        "model": "Reference Model"
+      },
+      "generated": {
+        "model": "Generated Model"
+      },
+      "metrics": {},
+      "metadata": {}
+    }
+  ]
+}
