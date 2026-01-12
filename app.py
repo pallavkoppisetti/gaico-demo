@@ -136,18 +136,6 @@ st.markdown("""
 
 # Sidebar
 with st.sidebar:
-    st.markdown("## 🧭 Navigation")
-    st.caption("Explore GAICo's evaluation capabilities")
-    st.divider()
-    
-    st.markdown("### 📍 Demo Sections")
-    st.page_link("pages/1_🧳_Case_Study.py", label="🧳 Case Study", icon="🧳")
-    st.page_link("pages/2_📝_Text_Evaluation.py", label="📝 Text Evaluation", icon="📝")
-    st.page_link("pages/3_📊_Structured_Data.py", label="📊 Structured Data", icon="📊")
-    st.page_link("pages/4_💬_LLM_FAQ.py", label="💬 LLM FAQ", icon="💬")
-    st.page_link("pages/5_🎨_Multi_Modal.py", label="🎨 Multi-Modal", icon="🎨")
-    
-    st.divider()
     st.markdown("### 🔗 Links")
     st.markdown(f"[📦 GitHub]({GITHUB_URL})")
     st.markdown(f"[🐍 PyPI]({PYPI_URL})")

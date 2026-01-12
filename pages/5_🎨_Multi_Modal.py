@@ -53,7 +53,7 @@ with tab1:
     
     if CSV_TTS_COMPARISON.exists():
         df_audio = pd.read_csv(CSV_TTS_COMPARISON)
-        st.dataframe(df_audio, use_container_width=True, hide_index=True)
+        st.dataframe(df_audio, width="stretch", hide_index=True)
         
         st.divider()
         
@@ -132,7 +132,7 @@ with tab2:
         st.markdown("#### 🏀 Basketball Team")
         if CSV_BASKETBALL.exists():
             df = pd.read_csv(CSV_BASKETBALL)
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            st.dataframe(df, width="stretch", hide_index=True)
         else:
             st.warning("CSV not found")
     
@@ -140,7 +140,7 @@ with tab2:
         st.markdown("#### 🚦 Street Signs")
         if CSV_STREET_SIGNS.exists():
             df = pd.read_csv(CSV_STREET_SIGNS)
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            st.dataframe(df, width="stretch", hide_index=True)
         else:
             st.warning("CSV not found")
 

@@ -45,7 +45,7 @@ with tab2:
         st.subheader("🎨 Modality Generation Quality")
         if CSV_MODALITY_QUALITY.exists():
             df_modality = pd.read_csv(CSV_MODALITY_QUALITY)
-            st.dataframe(df_modality, use_container_width=True, hide_index=True)
+            st.dataframe(df_modality, width="stretch", hide_index=True)
             
             st.caption("**Metrics Used:**")
             for metric in df_modality.columns[1:]:
@@ -58,7 +58,7 @@ with tab2:
         st.subheader("📋 Plan Coherence")
         if CSV_PLAN_COHERENCE.exists():
             df_plan = pd.read_csv(CSV_PLAN_COHERENCE)
-            st.dataframe(df_plan, use_container_width=True, hide_index=True)
+            st.dataframe(df_plan, width="stretch", hide_index=True)
             
             st.caption("**Metrics Used:**")
             for metric in df_plan.columns[1:]:
