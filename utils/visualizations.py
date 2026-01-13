@@ -1,10 +1,16 @@
 """Visualization utilities for displaying GAICo-generated plots."""
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
-from config import LLM_FAQ_PLOTS_DIR, CASE_STUDY_DIR
+from config import LLM_FAQ_PLOTS_DIR, CASE_STUDY_DIR, ASSETS_DIR
+
+# GAICo-style color palette
+GAICO_COLORS = px.colors.qualitative.Set2
 
 
 def display_plot(image_path: str, caption: Optional[str] = None) -> None:
@@ -13,6 +19,174 @@ def display_plot(image_path: str, caption: Optional[str] = None) -> None:
         st.image(image_path, caption=caption)
     else:
         st.error(f"❌ Image not found: {image_path}")
+
+
+def create_metric_bar_chart(
+    df: pd.DataFrame,
+    metric_col: str = "metric_name",
+    score_col: str = "score",
+    model_col: str = "model_name",
+    title: str = "Metric Comparison",
+    height: int = 400
+) -> go.Figure:
+    """
+    Create a grouped bar chart comparing metrics across models.
+    Matches GAICo's plot_metric_comparison style.
+    """
+    fig = px.bar(
+        df,
+        x=model_col,
+        y=score_col,
+        color=metric_col,
+        barmode="group",
+        title=title,
+        color_discrete_sequence=GAICO_COLORS,
+        height=height
+    )
+    
+    fig.update_layout(
+        xaxis_title="Model",
+        yaxis_title="Score",
+        legend_title="Metric",
+        font=dict(size=12),
+        title_font=dict(size=14),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    
+    fig.update_yaxes(range=[0, 1.1])
+    
+    return fig
+
+
+def create_single_metric_bar_chart(
+    df: pd.DataFrame,
+    metric_name: str,
+    metric_col: str = "metric_name",
+    score_col: str = "score",
+    model_col: str = "model_name",
+    title: Optional[str] = None,
+    height: int = 350
+) -> go.Figure:
+    """
+    Create a bar chart for a single metric across models.
+    Matches GAICo's plot_metric_comparison style.
+    """
+    filtered_df = df[df[metric_col] == metric_name]
+    
+    # Aggregate if multiple scores per model
+    agg_df = filtered_df.groupby(model_col)[score_col].mean().reset_index()
+    
+    fig = px.bar(
+        agg_df,
+        x=model_col,
+        y=score_col,
+        title=title or f"{metric_name} Comparison",
+        color=model_col,
+        color_discrete_sequence=GAICO_COLORS,
+        height=height
+    )
+    
+    fig.update_layout(
+        xaxis_title="Model",
+        yaxis_title="Score",
+        showlegend=False,
+        font=dict(size=12),
+        title_font=dict(size=14)
+    )
+    
+    fig.update_yaxes(range=[0, max(1.0, agg_df[score_col].max() * 1.1)])
+    
+    return fig
+
+
+def create_radar_chart(
+    df: pd.DataFrame,
+    metrics: List[str],
+    model_col: str = "model_name",
+    metric_col: str = "metric_name",
+    score_col: str = "score",
+    title: str = "Multi-Metric Radar Comparison",
+    height: int = 450
+) -> go.Figure:
+    """
+    Create a radar chart comparing multiple metrics across models.
+    Matches GAICo's plot_radar_comparison style.
+    """
+    fig = go.Figure()
+    
+    models = df[model_col].unique()
+    
+    for idx, model in enumerate(models):
+        model_df = df[df[model_col] == model]
+        
+        # Get scores for each metric
+        scores = []
+        for metric in metrics:
+            metric_score = model_df[model_df[metric_col] == metric][score_col].mean()
+            scores.append(metric_score if pd.notna(metric_score) else 0)
+        
+        # Close the radar chart
+        scores.append(scores[0])
+        metrics_closed = metrics + [metrics[0]]
+        
+        fig.add_trace(go.Scatterpolar(
+            r=scores,
+            theta=metrics_closed,
+            fill='toself',
+            name=model,
+            line_color=GAICO_COLORS[idx % len(GAICO_COLORS)],
+            opacity=0.7
+        ))
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(visible=True, range=[0, 1])
+        ),
+        showlegend=True,
+        title=title,
+        height=height,
+        font=dict(size=12),
+        title_font=dict(size=14)
+    )
+    
+    return fig
+
+
+def create_timeseries_line_chart(
+    series_data: dict,
+    title: str = "Time Series Comparison",
+    height: int = 400
+) -> go.Figure:
+    """
+    Create a line chart comparing time series data.
+    
+    Args:
+        series_data: Dict mapping series names to lists of values
+        title: Chart title
+        height: Chart height
+    """
+    fig = go.Figure()
+    
+    for idx, (name, values) in enumerate(series_data.items()):
+        fig.add_trace(go.Scatter(
+            x=list(range(len(values))),
+            y=values,
+            mode='lines+markers',
+            name=name,
+            line_color=GAICO_COLORS[idx % len(GAICO_COLORS)]
+        ))
+    
+    fig.update_layout(
+        title=title,
+        xaxis_title="Time Step",
+        yaxis_title="Value",
+        height=height,
+        font=dict(size=12),
+        title_font=dict(size=14),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    
+    return fig
 
 
 def display_case_study_plots(plot_type: str = "radar") -> None:

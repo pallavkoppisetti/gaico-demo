@@ -28,6 +28,7 @@ CASE_STUDY_DIR = GAICO_RESULTS_DIR / "case_study"
 AUDIO_DIR = GAICO_RESULTS_DIR / "audio"
 IMAGE_DIR = GAICO_RESULTS_DIR / "images"
 TEXT_DIR = GAICO_RESULTS_DIR / "text"
+STRUCTURED_DIR = GAICO_RESULTS_DIR / "structured"
 
 # CSV Paths
 CSV_MODALITY_QUALITY = CASE_STUDY_DIR / "csvs" / "results_modality_quality.csv"
@@ -35,6 +36,8 @@ CSV_PLAN_COHERENCE = CASE_STUDY_DIR / "csvs" / "results_plan_coherence.csv"
 CSV_TTS_COMPARISON = AUDIO_DIR / "csvs" / "tts_model_comparison.csv"
 CSV_BASKETBALL = IMAGE_DIR / "csvs" / "basketball_team_image_evaluation_results.csv"
 CSV_STREET_SIGNS = IMAGE_DIR / "csvs" / "street_signs_image_evaluation_results.csv"
+CSV_PLANNING_METRICS = STRUCTURED_DIR / "planning_metrics_report.csv"
+CSV_TIMESERIES_METRICS = STRUCTURED_DIR / "timeseries_metrics_report.csv"
 
 # Plot Paths
 LLM_FAQ_PLOTS_DIR = ASSETS_DIR / "plots" / "llm_faq"

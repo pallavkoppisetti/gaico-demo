@@ -30,13 +30,19 @@ def display_header():
 
 
 def display_sidebar_links():
-    """Display common sidebar links."""
-    st.markdown("### 🔗 Links")
-    st.markdown(f"[GitHub]({GITHUB_URL})")
-    st.markdown(f"[PyPI]({PYPI_URL})")
-    st.markdown(f"[Docs]({DOCS_URL})")
+    """Display common sidebar header and links for non-home pages."""
+    # GAICo header in sidebar
+    st.markdown(f"### {APP_ICON} GAICo Demo")
+    st.caption(APP_SUBTITLE)
     st.divider()
-    st.caption(f"{CONFERENCE} | {CONFERENCE_DATE.split(',')[0] if ',' in CONFERENCE_DATE else CONFERENCE_DATE}")
+    
+    st.markdown("### 🔗 Links")
+    st.markdown(f"[📦 GitHub]({GITHUB_URL})")
+    st.markdown(f"[🐍 PyPI]({PYPI_URL})")
+    st.markdown(f"[📚 Docs]({DOCS_URL})")
+    st.divider()
+    st.caption(f"📅 {CONFERENCE}")
+    st.caption(f"🏛️ {INSTITUTION}")
 
 
 def display_footer():
