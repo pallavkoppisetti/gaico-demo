@@ -13,7 +13,7 @@ from utils.ui_components import display_footer
 from utils.metric_info import get_metric_description, METRIC_INFO
 from utils.visualizations import display_case_study_plots
 
-st.header("✈️ AI Travel Assistant")
+st.header("✈️ E2: AI Travel Assistant")
 
 st.markdown("""
 This case study demonstrates GAICo's ability to evaluate **composite AI systems** that 

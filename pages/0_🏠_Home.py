@@ -11,7 +11,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import (
     APP_SUBTITLE,
     CONFERENCE, CONFERENCE_DATE, INSTITUTION,
-    GITHUB_URL, PYPI_URL, DOCS_URL, CONTACT_EMAIL, STATS
+    GITHUB_URL, PYPI_URL, DOCS_URL, CONTACT_EMAIL, STATS,
+    ASSETS_DIR
 )
 
 # Enhanced CSS for landing page
@@ -144,6 +145,9 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# Disclaimer
+st.info("ℹ️ **Note:** This demo showcases GAICo's capabilities under fixed use cases while optimizing for response time and robustness. The library itself can be utilized for any use case.")
+
 # Navigation hint
 st.markdown("""
 <div class="nav-hint">
@@ -192,6 +196,21 @@ with col4:
         <div class="feature-desc">Planning sequences, time-series, forecasts</div>
     </div>
     """, unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Sample Visualization Section
+st.markdown("### 📈 Sample Visualization")
+st.caption("GAICo automatically generates publication-ready visualizations")
+
+# Display the LLM FAQ radar chart as an example
+radar_plot_path = ASSETS_DIR / "plots" / "llm_faq" / "radar" / "overall_radar_chart.png"
+if radar_plot_path.exists():
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image(str(radar_plot_path), caption="Multi-LLM comparison across evaluation metrics (from E1: LLM FAQ)", use_container_width=True)
+else:
+    st.warning("Sample visualization not found")
 
 st.markdown("<br>", unsafe_allow_html=True)
 

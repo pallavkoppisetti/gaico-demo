@@ -11,7 +11,7 @@ from config import DATA_DIR, LLM_FAQ_PLOTS_DIR
 from utils.ui_components import display_footer
 from utils.visualizations import display_llm_faq_plots
 
-st.header("💬 LLM FAQ Evaluation")
+st.header("💬 E1: LLM FAQ Evaluation")
 
 st.markdown("""
 Comprehensive comparison of multiple LLMs on a FAQ dataset using multiple metrics.

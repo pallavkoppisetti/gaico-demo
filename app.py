@@ -48,13 +48,13 @@ multimodal_page = st.Page(
 
 llm_faq_page = st.Page(
     "pages/4_💬_LLM_FAQ.py",
-    title="LLM FAQ",
+    title="E1: LLM FAQ",
     icon="💬"
 )
 
 travel_page = st.Page(
     "pages/5_✈️_Travel_Assistant.py",
-    title="Travel Assistant",
+    title="E2: Travel Assistant",
     icon="✈️"
 )
 
@@ -82,8 +82,8 @@ with st.sidebar:
     st.page_link(text_page, label="Text Evaluation", icon="📝")
     st.page_link(structured_page, label="Structured Data", icon="📊")
     st.page_link(multimodal_page, label="Multi-Modal", icon="🎨")
-    st.page_link(llm_faq_page, label="LLM FAQ", icon="💬")
-    st.page_link(travel_page, label="Travel Assistant", icon="✈️")
+    st.page_link(llm_faq_page, label="E1: LLM FAQ", icon="💬")
+    st.page_link(travel_page, label="E2: Travel Assistant", icon="✈️")
     
     st.divider()
     
