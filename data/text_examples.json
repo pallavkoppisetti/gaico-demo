@@ -48,7 +48,7 @@
       "reference": {
         "text": "If you\n\n\n\nmoved to another residence within your precinct, you can update your address at your polling place and vote a regular ballot.\nmoved to a different precinct within your county, you are eligible vote Failsafe (see below).\nmoved to another residence in another county within 30 days of the election, you are eligible to vote Failsafe (see below).\nmoved to another residence in another county prior to the October 9 registration deadline, you are not eligible to vote. State law requires you to be registered prior to the deadline to be eligible to vote.\nmoved to South Carolina after the October 9 registration deadline, you are not eligible to vote. State law requires you to be registered prior to the deadline to be eligible to vote.\n\n\n\nTwo Options for Voting Failsafe:\n\nVote at the polling place in your previous precinct using a failsafe provisional ballot. A failsafe provisional ballot contains only federal, statewide, countywide, and municipality-wide offices.\nGo to the voter registration office in the county in which you currently reside, change your address, and vote a regular ballot there.",
         "word_count": 181,
-        "model": "Official SC Voter Information",
+        "model": "SafeChat",
         "source_file": "SC-Election-Data-April2022-AI-Comparison.csv"
       },
       "generated": {

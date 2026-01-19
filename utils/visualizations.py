@@ -27,7 +27,7 @@ def create_metric_bar_chart(
     score_col: str = "score",
     model_col: str = "model_name",
     title: str = "Metric Comparison",
-    height: int = 400
+    height: int = 550
 ) -> go.Figure:
     """
     Create a grouped bar chart comparing metrics across models.
@@ -48,9 +48,13 @@ def create_metric_bar_chart(
         xaxis_title="Model",
         yaxis_title="Score",
         legend_title="Metric",
-        font=dict(size=12),
-        title_font=dict(size=14),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        font=dict(size=14),
+        title_font=dict(size=20, color='#1f2937'),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=13)),
+        xaxis=dict(tickfont=dict(size=13)),
+        yaxis=dict(tickfont=dict(size=13)),
+        plot_bgcolor='rgba(248,250,252,0.8)',
+        paper_bgcolor='white'
     )
     
     fig.update_yaxes(range=[0, 1.1])
@@ -65,7 +69,7 @@ def create_single_metric_bar_chart(
     score_col: str = "score",
     model_col: str = "model_name",
     title: Optional[str] = None,
-    height: int = 350
+    height: int = 500
 ) -> go.Figure:
     """
     Create a bar chart for a single metric across models.
@@ -90,8 +94,12 @@ def create_single_metric_bar_chart(
         xaxis_title="Model",
         yaxis_title="Score",
         showlegend=False,
-        font=dict(size=12),
-        title_font=dict(size=14)
+        font=dict(size=14),
+        title_font=dict(size=20, color='#1f2937'),
+        xaxis=dict(tickfont=dict(size=13)),
+        yaxis=dict(tickfont=dict(size=13)),
+        plot_bgcolor='rgba(248,250,252,0.8)',
+        paper_bgcolor='white'
     )
     
     fig.update_yaxes(range=[0, max(1.0, agg_df[score_col].max() * 1.1)])
@@ -106,7 +114,7 @@ def create_radar_chart(
     metric_col: str = "metric_name",
     score_col: str = "score",
     title: str = "Multi-Metric Radar Comparison",
-    height: int = 450
+    height: int = 600
 ) -> go.Figure:
     """
     Create a radar chart comparing multiple metrics across models.
@@ -135,18 +143,35 @@ def create_radar_chart(
             fill='toself',
             name=model,
             line_color=GAICO_COLORS[idx % len(GAICO_COLORS)],
-            opacity=0.7
+            line_width=3,
+            opacity=0.75
         ))
     
     fig.update_layout(
         polar=dict(
-            radialaxis=dict(visible=True, range=[0, 1])
+            radialaxis=dict(
+                visible=True, 
+                range=[0, 1],
+                tickfont=dict(size=12, color='#4b5563'),
+                gridcolor='rgba(156, 163, 175, 0.3)'
+            ),
+            angularaxis=dict(
+                tickfont=dict(size=14, color='#1f2937', weight='bold'),
+                gridcolor='rgba(156, 163, 175, 0.3)'
+            ),
+            bgcolor='rgba(248,250,252,0.5)'
         ),
         showlegend=True,
-        title=title,
+        title=dict(text=title, font=dict(size=20, color='#1f2937')),
         height=height,
-        font=dict(size=12),
-        title_font=dict(size=14)
+        font=dict(size=14),
+        legend=dict(
+            font=dict(size=14),
+            bgcolor='rgba(255,255,255,0.9)',
+            bordercolor='#e5e7eb',
+            borderwidth=1
+        ),
+        paper_bgcolor='white'
     )
     
     return fig
@@ -177,13 +202,16 @@ def create_timeseries_line_chart(
         ))
     
     fig.update_layout(
-        title=title,
+        title=dict(text=title, font=dict(size=20, color='#1f2937')),
         xaxis_title="Time Step",
         yaxis_title="Value",
-        height=height,
-        font=dict(size=12),
-        title_font=dict(size=14),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        height=550,
+        font=dict(size=14),
+        xaxis=dict(tickfont=dict(size=13), gridcolor='rgba(156, 163, 175, 0.3)'),
+        yaxis=dict(tickfont=dict(size=13), gridcolor='rgba(156, 163, 175, 0.3)'),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=13)),
+        plot_bgcolor='rgba(248,250,252,0.8)',
+        paper_bgcolor='white'
     )
     
     return fig

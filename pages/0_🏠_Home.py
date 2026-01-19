@@ -3,6 +3,8 @@ GAICo Streamlit Demo - Landing Page
 """
 
 import streamlit as st
+import plotly.graph_objects as go
+import plotly.express as px
 import sys
 from pathlib import Path
 
@@ -14,6 +16,9 @@ from config import (
     GITHUB_URL, PYPI_URL, DOCS_URL, CONTACT_EMAIL, STATS,
     ASSETS_DIR
 )
+
+# GAICo-style color palette
+GAICO_COLORS = px.colors.qualitative.Set2
 
 # Enhanced CSS for landing page
 st.markdown("""
@@ -107,8 +112,8 @@ st.markdown("""
         color: #667eea;
     }
     .cta-secondary {
-        background: rgba(255,255,255,0.2);
-        color: white;
+        background: rgba(255,255,255,0.9);
+        color: #667eea;
         border: 2px solid white;
     }
     
@@ -128,6 +133,36 @@ st.markdown("""
         text-align: center;
         margin: 2rem 0;
         border: 1px solid #7dd3fc;
+    }
+    
+    /* Hook section */
+    .hook-container {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border: 2px solid #667eea;
+    }
+    .hook-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Acknowledgment section */
+    .acknowledgment {
+        background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+        border-radius: 0.75rem;
+        padding: 1rem 1.5rem;
+        margin: 1.5rem 0;
+        border-left: 4px solid #f59e0b;
+        font-size: 0.9rem;
+    }
+    .acknowledgment-title {
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 0.25rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -154,6 +189,103 @@ st.markdown("""
     👈 <strong>Use the sidebar</strong> to explore different evaluation demos, or scroll down to learn more about GAICo
 </div>
 """, unsafe_allow_html=True)
+
+# ============================================================================
+# HOOK SECTION: Interactive Preview with DeepSeek Example
+# ============================================================================
+st.markdown("### 🎯 Try It Now: See GAICo in Action")
+
+# Create a compelling hook with the DeepSeek example
+hook_col1, hook_col2 = st.columns([3, 2])
+
+with hook_col1:
+    st.markdown("""
+    <div class="hook-container">
+        <div class="hook-title">💡 How did DeepSeek train a model for $6M vs $100M for GPT-4?</div>
+        <p style="color: #4b5563; font-size: 0.95rem; margin-bottom: 0.5rem;">
+        Compare how <strong>DeepSeek R1</strong> and <strong>Llama 3.3</strong> explain the same technical topic. 
+        GAICo evaluates their responses using multiple metrics.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Display side-by-side response snippets
+    mini_col1, mini_col2 = st.columns(2)
+    with mini_col1:
+        st.markdown("**DeepSeek R1** (238 words)")
+        st.markdown(
+            '<div style="background-color: #e8f4f8; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; max-height: 150px; overflow-y: auto;">'
+            '<strong>Key points:</strong> Hardware optimization, simplified architecture, efficient algorithms, data efficiency, open-source utilization...'
+            '</div>',
+            unsafe_allow_html=True
+        )
+    with mini_col2:
+        st.markdown("**Llama 3.3** (472 words)")
+        st.markdown(
+            '<div style="background-color: #e8f8e8; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; max-height: 150px; overflow-y: auto;">'
+            '<strong>Key points:</strong> Efficient use of existing technologies, smaller team size, innovative training methods, affordable computing resources...'
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+with hook_col2:
+    # Create a mini radar chart for the hook
+    hook_metrics = {
+        "BLEU": 0.42,
+        "ROUGE-L": 0.58,
+        "BERTScore": 0.87,
+        "Jaccard": 0.35,
+        "Levenshtein": 0.68
+    }
+    
+    metrics_list = list(hook_metrics.keys())
+    scores = list(hook_metrics.values())
+    scores.append(scores[0])  # Close the radar
+    metrics_list_closed = metrics_list + [metrics_list[0]]
+    
+    fig = go.Figure()
+    fig.add_trace(go.Scatterpolar(
+        r=scores,
+        theta=metrics_list_closed,
+        fill='toself',
+        name='DeepSeek vs Llama',
+        line_color='#667eea',
+        line_width=3,
+        fillcolor='rgba(102, 126, 234, 0.35)'
+    ))
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True, 
+                range=[0, 1], 
+                tickfont=dict(size=12, color='#4b5563'),
+                gridcolor='rgba(156, 163, 175, 0.3)'
+            ),
+            angularaxis=dict(
+                tickfont=dict(size=14, color='#1f2937', weight='bold'),
+                gridcolor='rgba(156, 163, 175, 0.3)'
+            ),
+            bgcolor='rgba(248,250,252,0.5)'
+        ),
+        showlegend=False,
+        title=dict(text="GAICo Similarity Scores", font=dict(size=18, color='#1f2937')),
+        height=420,
+        margin=dict(l=60, r=60, t=70, b=40),
+        paper_bgcolor='white'
+    )
+    
+    st.plotly_chart(fig, width='stretch')
+
+# Call to action
+st.markdown("""
+<div style="text-align: center; margin: 1rem 0;">
+    <p style="color: #6b7280;">👆 <strong>High BERTScore (0.87)</strong> shows semantic similarity despite different styles. 
+    <a href="/Text_Evaluation" target="_self" style="color: #667eea; font-weight: 600;">Explore full analysis →</a></p>
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
 
 # Modality Cards
 st.markdown("### 🎨 Multi-Modal Evaluation")
@@ -196,21 +328,6 @@ with col4:
         <div class="feature-desc">Planning sequences, time-series, forecasts</div>
     </div>
     """, unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Sample Visualization Section
-st.markdown("### 📈 Sample Visualization")
-st.caption("GAICo automatically generates publication-ready visualizations")
-
-# Display the LLM FAQ radar chart as an example
-radar_plot_path = ASSETS_DIR / "plots" / "llm_faq" / "radar" / "overall_radar_chart.png"
-if radar_plot_path.exists():
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image(str(radar_plot_path), caption="Multi-LLM comparison across evaluation metrics (from E1: LLM FAQ)", use_container_width=True)
-else:
-    st.warning("Sample visualization not found")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -258,6 +375,15 @@ results = exp.compare(plot=True)
 
 # Footer
 st.divider()
+
+# Acknowledgments
+st.markdown("""
+<div class="acknowledgment">
+    <div class="acknowledgment-title"> Acknowledgments</div>
+    This work is partially supported by <strong>NSF Awards #2454027, NAIRR250014</strong>, and <strong>Faculty Award by JP Morgan Research</strong>.
+</div>
+""", unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown(f"""

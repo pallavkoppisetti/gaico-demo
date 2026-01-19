@@ -48,6 +48,7 @@ def display_sidebar_links():
 def display_footer():
     """Display the page footer."""
     st.divider()
+    
     st.markdown(f"""
     <div style='text-align: center; color: #666; padding: 1rem;'>
         <p><strong>GAICo Demo</strong> | {INSTITUTION} | {CONFERENCE}</p>

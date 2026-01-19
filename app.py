@@ -92,6 +92,7 @@ with st.sidebar:
     st.markdown(f"[📦 GitHub]({GITHUB_URL})")
     st.markdown(f"[🐍 PyPI]({PYPI_URL})")
     st.markdown(f"[📚 Docs]({DOCS_URL})")
+    st.markdown("[📄 Demo Paper](https://ai4society.github.io/publications/papers_local/GAICO-Demo-AAAI2026.pdf)")
     st.divider()
     st.caption(f"📅 {CONFERENCE}")
     st.caption(f"🏛️ {INSTITUTION}")
