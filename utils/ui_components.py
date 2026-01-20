@@ -26,7 +26,7 @@ def display_header():
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.info(f"📊 **{CONFERENCE}** | {CONFERENCE_DATE} | {INSTITUTION}")
+        st.info(f"**{CONFERENCE}** | {CONFERENCE_DATE} | {INSTITUTION}")
 
 
 def display_sidebar_links():
@@ -36,13 +36,13 @@ def display_sidebar_links():
     st.caption(APP_SUBTITLE)
     st.divider()
     
-    st.markdown("### 🔗 Links")
-    st.markdown(f"[📦 GitHub]({GITHUB_URL})")
-    st.markdown(f"[🐍 PyPI]({PYPI_URL})")
-    st.markdown(f"[📚 Docs]({DOCS_URL})")
+    st.markdown("### Links")
+    st.markdown(f"[GitHub]({GITHUB_URL})")
+    st.markdown(f"[PyPI]({PYPI_URL})")
+    st.markdown(f"[Docs]({DOCS_URL})")
     st.divider()
-    st.caption(f"📅 {CONFERENCE}")
-    st.caption(f"🏛️ {INSTITUTION}")
+    st.caption(f"{CONFERENCE}")
+    st.caption(f"{INSTITUTION}")
 
 
 def display_footer():

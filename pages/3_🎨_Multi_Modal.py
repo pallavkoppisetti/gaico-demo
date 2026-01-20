@@ -25,10 +25,24 @@ Select a modality and example to explore input data with corresponding visualiza
 # ============================================================================
 # Modality Selector (Outside tabs for consistency)
 # ============================================================================
+st.markdown("##### ⚙️ Configure Evaluation")
+
+with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
+    st.markdown("""
+    **You are selecting:** The media type (audio or image) and specific comparison scenario.
+    
+    | Component | Description |
+    |-----------|-------------|
+    | **📥 GAICo Inputs** | A *reference* media file and one or more *generated* files from AI models |
+    | **📤 GAICo Outputs** | Perceptual quality scores: **AudioSNR** & **SpectrogramDistance** for audio; **SSIM**, **AverageHash**, **HistogramMatch** for images |
+    | **🎯 What this shows** | How faithfully AI-generated media reproduces the quality and characteristics of reference content |
+    """)
+
 modality = st.radio(
     "Select Modality",
     ["🔊 Audio (TTS)", "🖼️ Images"],
-    horizontal=True
+    horizontal=True,
+    help="Choose the media type to evaluate"
 )
 
 st.divider()
@@ -42,17 +56,19 @@ if modality == "🔊 Audio (TTS)":
     
     st.markdown("""
     Comparing different Text-to-Speech models against a reference using audio quality metrics.
-    GAICo evaluates **AudioSNR** (signal-to-noise ratio) and **AudioSpectrogramDistance**.
+    GAICo evaluates **AudioSNR** (signal-to-noise ratio) and **AudioSpectrogramDistance** (spectral similarity).
     """)
     
+    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    
     # Two-tab structure
-    tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+    tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
     
     # =========================================================================
     # TAB 1: Input + Visualization
     # =========================================================================
     with tab1:
-        st.markdown("### 📥 Input Data - Audio Samples")
+        st.markdown("### Input Data - Audio Samples")
         
         # Reference Audio
         st.markdown("**Reference Audio:** Microsoft Edge TTS (Aria)")
@@ -84,24 +100,40 @@ if modality == "🔊 Audio (TTS)":
         
         st.divider()
         
-        # Visualization
-        st.markdown("### 📈 GAICo Visualization")
+        # Visualization - Use bar chart for audio (clearer than radar for 2 metrics)
+        st.markdown("### GAICo Visualization")
         
         if CSV_TTS_COMPARISON.exists():
             df = pd.read_csv(CSV_TTS_COMPARISON)
-            metrics = df['metric_name'].unique().tolist()
             
-            # Radar chart - use larger height for better visibility
-            fig_radar = create_radar_chart(
+            # Create grouped bar chart for audio metrics (clearer for 2 metrics)
+            fig = px.bar(
                 df,
-                metrics=metrics,
+                x='model_name',
+                y='score',
+                color='metric_name',
+                barmode='group',
                 title="TTS Audio Quality - Model Comparison",
-                height=800
+                color_discrete_sequence=GAICO_COLORS,
+                height=500
             )
             
-            st.plotly_chart(fig_radar, width='stretch')
+            fig.update_layout(
+                xaxis_title="Model",
+                yaxis_title="Score (0-1, higher is better)",
+                legend_title="Metric",
+                font=dict(size=14),
+                title_font=dict(size=20, color='#1f2937'),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                plot_bgcolor='rgba(248,250,252,0.8)',
+                paper_bgcolor='white'
+            )
             
-            st.caption("Radar chart comparing TTS models across audio quality metrics.")
+            fig.update_yaxes(range=[0, 1.1])
+            
+            st.plotly_chart(fig, width='stretch')
+            
+            st.caption("Bar chart comparing TTS models across audio quality metrics. Higher scores indicate better quality.")
         else:
             st.warning("Audio comparison data not found")
     
@@ -109,7 +141,7 @@ if modality == "🔊 Audio (TTS)":
     # TAB 2: Scores & Analysis
     # =========================================================================
     with tab2:
-        st.markdown("### 🎯 Evaluation Scores")
+        st.markdown("### Evaluation Scores")
         
         if CSV_TTS_COMPARISON.exists():
             df_audio = pd.read_csv(CSV_TTS_COMPARISON)
@@ -136,22 +168,24 @@ if modality == "🔊 Audio (TTS)":
             st.divider()
             
             # Metric explanations
-            st.markdown("### 📖 Metric Explanations")
+            st.markdown("### Metric Explanations")
             
             with st.expander("**AudioSNR** (Signal-to-Noise Ratio)"):
                 st.markdown("""
-                - Range: 0.0 to 1.0 (normalized)
-                - Higher values indicate clearer audio
-                - Detects artifacts, noise, distortion
-                - Threshold: 0.5 (50% quality)
+                - **Range:** 0.0 to 1.0 (normalized)
+                - **Interpretation:** Higher is better (1.0 = identical signals)
+                - Measures audio clarity and quality
+                - Detects artifacts, noise, and distortion
+                - **Threshold:** 0.5 (50% quality)
                 """)
             
-            with st.expander("**AudioSpectrogramDistance**"):
+            with st.expander("**AudioSpectrogramDistance** (Spectrogram Similarity)"):
                 st.markdown("""
-                - Range: 0.0 to 1.0
-                - Higher values indicate more similar spectrograms
-                - Compares timbre, pitch, frequency content
-                - Threshold: 0.5 (50% similarity)
+                - **Range:** 0.0 to 1.0
+                - **Interpretation:** Higher is better (1.0 = identical spectrograms)
+                - Compares frequency content, timbre, and pitch over time
+                - Uses STFT analysis with configurable distance metrics
+                - **Threshold:** 0.5 (50% similarity)
                 """)
         else:
             st.error("Audio comparison CSV not found")
@@ -165,9 +199,10 @@ else:
     
     # Image example selector
     image_example = st.selectbox(
-        "Select Example",
+        "Select Image Scenario",
         ["Street Signs", "Basketball Team"],
-        key="image_example"
+        key="image_example",
+        help="Choose an image comparison scenario to explore"
     )
     
     st.markdown("""
@@ -182,8 +217,10 @@ else:
         csv_path = CSV_BASKETBALL
         title = "Basketball Team Image Quality"
     
+    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    
     # Two-tab structure
-    tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+    tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
     
     # =========================================================================
     # TAB 1: Input + Visualization
@@ -191,7 +228,7 @@ else:
     with tab1:
         
         if image_example == "Street Signs":
-            st.markdown("### 📥 Input Data - Street Signs")
+            st.markdown("### Input Data - Street Signs")
             
             street_images = {
                 "Reference": IMAGE_DIR / "samples" / "street-sign" / "street-sign.png",
@@ -209,7 +246,7 @@ else:
                         st.warning("Not found")
             
         else:  # Basketball Team
-            st.markdown("### 📥 Input Data - Basketball Team")
+            st.markdown("### Input Data - Basketball Team")
             
             team_images = {
                 "Reference": IMAGE_DIR / "samples" / "team" / "team.png",
@@ -229,7 +266,7 @@ else:
         st.divider()
         
         # Visualization
-        st.markdown("### 📈 GAICo Visualization")
+        st.markdown("### GAICo Visualization")
         
         if csv_path.exists():
             df = pd.read_csv(csv_path)
@@ -253,7 +290,7 @@ else:
     # TAB 2: Scores & Analysis
     # =========================================================================
     with tab2:
-        st.markdown("### 🎯 Evaluation Scores")
+        st.markdown("### Evaluation Scores")
         
         if csv_path.exists():
             df = pd.read_csv(csv_path)
@@ -279,30 +316,30 @@ else:
             st.divider()
             
             # Metric explanations
-            st.markdown("### 📖 Metric Explanations")
+            st.markdown("### Metric Explanations")
             
             with st.expander("**ImageSSIM** (Structural Similarity)"):
                 st.markdown("""
-                - Range: 0.0 to 1.0
-                - Higher is better
-                - Measures structural similarity
-                - Sensitive to luminance, contrast, structure
+                - **Range:** 0.0 to 1.0
+                - **Interpretation:** Higher is better (1.0 = identical images)
+                - Measures structural similarity based on luminance, contrast, and structure
+                - Sensitive to perceptual quality changes
                 """)
             
             with st.expander("**ImageAverageHash** (Perceptual Hash)"):
                 st.markdown("""
-                - Range: 0.0 to 1.0
-                - Higher is better
-                - Compares image fingerprints
-                - Robust to minor changes
+                - **Range:** 0.0 to 1.0
+                - **Interpretation:** Higher is better (1.0 = identical hashes)
+                - Compares perceptual image fingerprints
+                - Robust to minor changes (blur, brightness adjustments)
                 """)
             
-            with st.expander("**ImageHistogramMatch**"):
+            with st.expander("**ImageHistogramMatch** (Color Distribution)"):
                 st.markdown("""
-                - Range: 0.0 to 1.0
-                - Higher is better
-                - Compares color distributions
-                - Detects color/tone differences
+                - **Range:** 0.0 to 1.0
+                - **Interpretation:** Higher is better (1.0 = identical distributions)
+                - Compares color histogram distributions across RGB channels
+                - Detects color and tone differences
                 """)
         else:
             st.warning("CSV not found")

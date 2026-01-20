@@ -171,7 +171,7 @@ st.markdown("""
 st.markdown(f"""
 <div class="hero-container">
     <div class="hero-title">📊 GAICo</div>
-    <div class="hero-subtitle">{APP_SUBTITLE}</div>
+    <div class="hero-subtitle">This app demonstrates the capabilities of GAICo:<br/>{APP_SUBTITLE}</div>
     <div class="hero-badge">🎯 {CONFERENCE} • {CONFERENCE_DATE} • {INSTITUTION}</div>
     <div class="cta-container">
         <a href="{PYPI_URL}" target="_blank" class="cta-button cta-primary">pip install gaico</a>
@@ -186,14 +186,17 @@ st.info("ℹ️ **Note:** This demo showcases GAICo's capabilities under fixed u
 # Navigation hint
 st.markdown("""
 <div class="nav-hint">
-    👈 <strong>Use the sidebar</strong> to explore different evaluation demos, or scroll down to learn more about GAICo
+    👈 <strong>Use the sidebar</strong> to explore different evaluation scenarios<br/>
+    <small>Each page has two tabs: <strong>Input & Visualization</strong> (see the data) and <strong>Scores & Analysis</strong> (see the results)</small>
 </div>
 """, unsafe_allow_html=True)
 
 # ============================================================================
 # HOOK SECTION: Interactive Preview with DeepSeek Example
 # ============================================================================
-st.markdown("### 🎯 Try It Now: See GAICo in Action")
+st.divider()
+
+st.markdown("### 🔍 Try It Now: See GAICo in Action")
 
 # Create a compelling hook with the DeepSeek example
 hook_col1, hook_col2 = st.columns([3, 2])
@@ -201,10 +204,14 @@ hook_col1, hook_col2 = st.columns([3, 2])
 with hook_col1:
     st.markdown("""
     <div class="hook-container">
-        <div class="hook-title">💡 How did DeepSeek train a model for $6M vs $100M for GPT-4?</div>
+        <div class="hook-title">📝 Example: Comparing LLM Responses</div>
         <p style="color: #4b5563; font-size: 0.95rem; margin-bottom: 0.5rem;">
-        Compare how <strong>DeepSeek R1</strong> and <strong>Llama 3.3</strong> explain the same technical topic. 
-        GAICo evaluates their responses using multiple metrics.
+        <strong>Sample Question:</strong> <em>"How did DeepSeek train a model for $6M vs $100M for GPT-4?"</em><br/><br/>
+        <strong>📥 Inputs (what we feed to GAICo):</strong><br/>
+        &bull; Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question<br/><br/>
+        <strong>📤 Outputs (what GAICo produces):</strong><br/>
+        &bull; Similarity metrics comparing the responses (see radar chart →)<br/>
+        &bull; Detailed scores available in the <strong>Scores & Analysis</strong> tab
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -332,8 +339,7 @@ with col4:
 st.markdown("<br>", unsafe_allow_html=True)
 
 # Stats Section
-st.markdown('<div class="stats-container">', unsafe_allow_html=True)
-st.markdown("### 📈 GAICo by the Numbers")
+st.markdown("### GAICo by the Numbers")
 col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("PyPI Downloads", STATS["pypi_downloads"], "Active Users")
@@ -341,13 +347,12 @@ with col2:
     st.metric("Built-in Metrics", STATS["metrics_count"], "Across 4 Modalities")
 with col3:
     st.metric("Example Notebooks", STATS["notebooks_count"], "Ready to Run")
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Two column layout: Features + Quick Start
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.markdown("### ✨ Key Features")
+    st.markdown("### Key Features")
     st.markdown("""
     - ✅ **15+ Built-in Metrics** — BLEU, ROUGE, BERTScore, SSIM, DTW, and more
     - ✅ **Extensible Architecture** — Easy to add custom metrics
@@ -358,9 +363,8 @@ with col1:
     """)
 
 with col2:
-    st.markdown("### 🚀 Quick Start")
-    st.code("""
-from gaico import Experiment
+    st.markdown("### Quick Start")
+    st.code("""from gaico import Experiment
 
 exp = Experiment(
     llm_responses={

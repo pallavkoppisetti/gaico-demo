@@ -18,7 +18,7 @@ from utils.visualizations import display_plot
 # GAICo-style color palette
 GAICO_COLORS = px.colors.qualitative.Set2
 
-st.header("📝 Text Evaluation Examples")
+st.header("Text Evaluation Examples")
 
 text_data = load_text_examples()
 
@@ -34,11 +34,25 @@ from production use cases. Select an example to see the input data and correspon
 # ============================================================================
 # Example Selector (Outside tabs for consistency)
 # ============================================================================
+st.markdown("##### ⚙️ Configure Evaluation")
+
+with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
+    st.markdown("""
+    **You are selecting:** A pre-configured text comparison scenario.
+    
+    | Component | Description |
+    |-----------|-------------|
+    | **📥 GAICo Inputs** | Two text responses (a *reference* answer and a *generated* answer) from different LLMs |
+    | **📤 GAICo Outputs** | Similarity scores (BLEU, ROUGE, BERTScore, etc.) measuring how closely the generated text matches the reference |
+    | **🎯 What this shows** | How well one LLM's response aligns with another across multiple linguistic dimensions |
+    """)
+
 example_names = {ex["id"]: ex["name"] for ex in text_data["examples"]}
 selected_id = st.selectbox(
-    "Select Example",
+    "Select Use Case",
     options=list(example_names.keys()),
-    format_func=lambda x: example_names[x]
+    format_func=lambda x: example_names[x],
+    help="Choose a pre-configured evaluation scenario to explore"
 )
 
 example = next((ex for ex in text_data["examples"] if ex["id"] == selected_id), None)
@@ -47,10 +61,12 @@ if not example:
     st.error("Example not found")
     st.stop()
 
+st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
 # ============================================================================
-tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
 
 # ============================================================================
 # TAB 1: Input Data + Visualization (The Hook)
@@ -67,7 +83,7 @@ with tab1:
     # -------------------------------------------------------------------------
     # Input Section: Reference & Generated (Side by Side)
     # -------------------------------------------------------------------------
-    st.markdown("### 📥 Input Data")
+    st.markdown("### Input Data")
     
     col1, col2 = st.columns(2)
     
@@ -80,7 +96,7 @@ with tab1:
     
     with col1:
         st.markdown("**Reference**")
-        st.caption(f"📌 Model: {example['reference']['model']} | Words: {example['reference']['word_count']}")
+        st.caption(f"Model: {example['reference']['model']} | Words: {example['reference']['word_count']}")
         formatted_ref = format_text(example['reference']['text'])
         st.markdown(
             f'<div style="background-color: #e8f4f8; padding: 1rem; border-radius: 0.5rem; max-height: 350px; overflow-y: auto; white-space: pre-wrap; font-size: 0.85rem;">{formatted_ref}</div>',
@@ -89,7 +105,7 @@ with tab1:
     
     with col2:
         st.markdown("**Generated**")
-        st.caption(f"📌 Model: {example['generated']['model']} | Words: {example['generated']['word_count']}")
+        st.caption(f"Model: {example['generated']['model']} | Words: {example['generated']['word_count']}")
         formatted_gen = format_text(example['generated']['text'])
         st.markdown(
             f'<div style="background-color: #e8f8e8; padding: 1rem; border-radius: 0.5rem; max-height: 350px; overflow-y: auto; white-space: pre-wrap; font-size: 0.85rem;">{formatted_gen}</div>',
@@ -101,7 +117,7 @@ with tab1:
     # -------------------------------------------------------------------------
     # Visualization Section (Corresponding to Selected Example)
     # -------------------------------------------------------------------------
-    st.markdown("### 📈 GAICo Visualization")
+    st.markdown("### GAICo Visualization")
     
     metrics = example.get("metrics", {})
     
@@ -205,7 +221,7 @@ with tab1:
 # TAB 2: Scores, CSV Report & Metric Explanations
 # ============================================================================
 with tab2:
-    st.subheader(f"📊 Detailed Analysis: {example['name']}")
+    st.subheader(f"Detailed Analysis: {example['name']}")
     
     metrics = example.get("metrics", {})
     
@@ -213,7 +229,7 @@ with tab2:
         # -------------------------------------------------------------------------
         # Metric Score Cards
         # -------------------------------------------------------------------------
-        st.markdown("### 🎯 Evaluation Scores")
+        st.markdown("### Evaluation Scores")
         
         cols = st.columns(min(len(metrics), 4))
         for idx, (metric_name, score) in enumerate(metrics.items()):
@@ -229,7 +245,7 @@ with tab2:
         # -------------------------------------------------------------------------
         # CSV Report Table
         # -------------------------------------------------------------------------
-        st.markdown("### 📋 Evaluation Report")
+        st.markdown("### Evaluation Report")
         
         # Create a formatted dataframe for the report
         report_data = []
@@ -259,7 +275,7 @@ with tab2:
         # -------------------------------------------------------------------------
         # Metric Descriptions
         # -------------------------------------------------------------------------
-        st.markdown("### 📖 Metric Explanations")
+        st.markdown("### Metric Explanations")
         
         for metric_name in metrics.keys():
             if metric_name in METRIC_INFO:

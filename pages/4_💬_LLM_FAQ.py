@@ -15,7 +15,7 @@ from utils.visualizations import display_llm_faq_plots
 # GAICo-style color palette
 GAICO_COLORS = px.colors.qualitative.Set2
 
-st.header("💬 E1: LLM FAQ Evaluation")
+st.header("E1: LLM FAQ Evaluation")
 
 st.markdown("""
 Comprehensive comparison of **DeepSeek R1** vs **Llama 3.3** on a FAQ dataset using multiple metrics.
@@ -36,19 +36,35 @@ df = pd.read_csv(csv_path)
 # ============================================================================
 # Question Selector (Outside tabs for consistency)
 # ============================================================================
+st.markdown("##### ⚙️ Configure Evaluation")
+
+with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
+    st.markdown("""
+    **You are selecting:** A FAQ question to see how two different LLMs answered it.
+    
+    | Component | Description |
+    |-----------|-------------|
+    | **📥 GAICo Inputs** | Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question |
+    | **📤 GAICo Outputs** | Multi-metric comparison: BLEU, ROUGE, BERTScore, Jaccard, Levenshtein, and more |
+    | **🎯 What this shows** | How similarly (or differently) two state-of-the-art LLMs respond to the same prompt |
+    """)
+
 questions = df['question'].tolist()
 selected_q_idx = st.selectbox(
     "Select Question",
     range(len(questions)),
-    format_func=lambda x: questions[x][:80] + "..." if len(questions[x]) > 80 else questions[x]
+    format_func=lambda x: questions[x][:80] + "..." if len(questions[x]) > 80 else questions[x],
+    help="Choose a question to compare LLM responses"
 )
 
 selected_row = df.iloc[selected_q_idx]
 
+st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
 # ============================================================================
-tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
 
 # ============================================================================
 # TAB 1: Input Data + Visualization (The Hook)
@@ -63,7 +79,7 @@ with tab1:
     # -------------------------------------------------------------------------
     # Input Section: Side by Side Responses
     # -------------------------------------------------------------------------
-    st.markdown("### 📥 Input Data")
+    st.markdown("### Input Data")
     
     col1, col2 = st.columns(2)
     
@@ -97,17 +113,17 @@ with tab1:
     # -------------------------------------------------------------------------
     # Visualization Section
     # -------------------------------------------------------------------------
-    st.markdown("### 📈 GAICo Visualization")
+    st.markdown("### GAICo Visualization")
     
     # Display aggregate visualization from pre-generated plots
     plot_type = st.selectbox(
         "Select Visualization Type",
         options=["radar", "bar", "heatmaps", "line"],
         format_func=lambda x: {
-            "radar": "📡 Radar Charts (Multi-Metric Overview)",
-            "bar": "📊 Bar Charts (Model Comparison)",
-            "heatmaps": "🔥 Heatmaps (Score Matrix)",
-            "line": "📈 Line Plots (Trend Analysis)"
+            "radar": "Radar Charts (Multi-Metric Overview)",
+            "bar": "Bar Charts (Model Comparison)",
+            "heatmaps": "Heatmaps (Score Matrix)",
+            "line": "Line Plots (Trend Analysis)"
         }[x],
         key="viz_type_tab1"
     )
@@ -118,7 +134,7 @@ with tab1:
 # TAB 2: Scores, Analysis & Metric Explanations
 # ============================================================================
 with tab2:
-    st.subheader("📊 Detailed Analysis")
+    st.subheader("Detailed Analysis")
     
     st.markdown(f"**Question:** {selected_row['question'][:100]}...")
     
@@ -127,7 +143,7 @@ with tab2:
     # -------------------------------------------------------------------------
     # Aggregate Metrics Information
     # -------------------------------------------------------------------------
-    st.markdown("### 🎯 Evaluation Methodology")
+    st.markdown("### Evaluation Methodology")
     
     st.info("""
     GAICo computes the following metrics to compare DeepSeek R1 and Llama 3.3 responses:
@@ -144,7 +160,7 @@ with tab2:
     # -------------------------------------------------------------------------
     # CSV Report (All Questions)
     # -------------------------------------------------------------------------
-    st.markdown("### 📋 Full Dataset Overview")
+    st.markdown("### Full Dataset Overview")
     
     # Create a summary table
     summary_data = []
@@ -172,7 +188,7 @@ with tab2:
     # -------------------------------------------------------------------------
     # Metric Descriptions
     # -------------------------------------------------------------------------
-    st.markdown("### 📖 Metric Explanations")
+    st.markdown("### Metric Explanations")
     
     col1, col2 = st.columns(2)
     

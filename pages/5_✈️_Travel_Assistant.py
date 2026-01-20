@@ -17,7 +17,7 @@ from utils.visualizations import display_case_study_plots
 # GAICo-style color palette
 GAICO_COLORS = px.colors.qualitative.Set2
 
-st.header("✈️ E2: AI Travel Assistant")
+st.header("E2: AI Travel Assistant")
 
 st.markdown("""
 This case study demonstrates GAICo's ability to evaluate **composite AI systems** that 
@@ -28,6 +28,19 @@ that generate itineraries, images, and audio descriptions.
 # ============================================================================
 # Pipeline Selector (Outside tabs for consistency)
 # ============================================================================
+st.markdown("##### ⚙️ Configure Evaluation")
+
+with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
+    st.markdown("""
+    **You are selecting:** An AI pipeline configuration (combination of LLM + image generator) and a day of the itinerary.
+    
+    | Component | Description |
+    |-----------|-------------|
+    | **📥 GAICo Inputs** | Multi-modal outputs from each pipeline: text itinerary, activity sequence, image prompt, and audio script |
+    | **📤 GAICo Outputs** | Cross-modality metrics comparing each pipeline's outputs against the reference |
+    | **🎯 What this shows** | How GAICo can evaluate complex AI systems that produce multiple output types simultaneously |
+    """)
+
 examples_dir = CASE_STUDY_DIR / "examples"
 
 pipelines = {
@@ -37,7 +50,11 @@ pipelines = {
     "Pipeline C (Gemini 2.5 Pro + Imagen)": examples_dir / "pipeline_C.json"
 }
 
-selected_pipeline = st.selectbox("Select Pipeline", list(pipelines.keys()))
+selected_pipeline = st.selectbox(
+    "Select Pipeline",
+    list(pipelines.keys()),
+    help="Choose a travel assistant pipeline to evaluate"
+)
 
 json_path = pipelines[selected_pipeline]
 if not json_path.exists():
@@ -48,15 +65,15 @@ with open(json_path, 'r') as f:
     data = json.load(f)
 
 # Day selector
-selected_day = st.radio("Select Day", [1, 2, 3], horizontal=True)
+selected_day = st.radio("Select Day", [1, 2, 3], horizontal=True, help="Choose which day of the itinerary to view")
 day_data = data["trip_plan"][selected_day - 1]
 
-st.divider()
+st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
 
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
 # ============================================================================
-tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
 
 # ============================================================================
 # TAB 1: Input Data + Visualization (The Hook)
@@ -74,10 +91,10 @@ with tab1:
     # -------------------------------------------------------------------------
     # Input Section: Trip Planning Data
     # -------------------------------------------------------------------------
-    st.markdown("### 📥 Input Data")
+    st.markdown("### Input Data")
     
     # Day Plan Text
-    st.markdown("**📝 Day Plan**")
+    st.markdown("**Day Plan**")
     st.markdown(
         f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem;">{day_data["day_plan_text"]}</div>',
         unsafe_allow_html=True
@@ -86,22 +103,22 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**📋 Activity Sequence**")
+        st.markdown("**Activity Sequence**")
         st.markdown(
             f'<div style="background-color: #e8f4f8; padding: 0.75rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.85rem;">{day_data["day_plan_sequence"]}</div>',
             unsafe_allow_html=True
         )
         
-        st.markdown(f"**💰 Budget:** €{day_data['day_budget_euros']}")
+        st.markdown(f"**Budget:** €{day_data['day_budget_euros']}")
     
     with col2:
-        st.markdown("**🎨 Image Prompt**")
+        st.markdown("**Image Prompt**")
         st.markdown(
             f'<div style="background-color: #fef3c7; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.85rem;">{day_data["image_prompt"]}</div>',
             unsafe_allow_html=True
         )
     
-    st.markdown("**🔊 Audio Script**")
+    st.markdown("**Audio Script**")
     st.markdown(
         f'<div style="background-color: #e8f8e8; padding: 0.75rem; border-radius: 0.5rem;">{day_data["audio_script"]}</div>',
         unsafe_allow_html=True
@@ -112,7 +129,7 @@ with tab1:
     # -------------------------------------------------------------------------
     # Visualization Section
     # -------------------------------------------------------------------------
-    st.markdown("### 📈 GAICo Visualization")
+    st.markdown("### GAICo Visualization")
     
     viz_type = st.radio(
         "Visualization Type",
@@ -130,7 +147,7 @@ with tab1:
 # TAB 2: Scores, Analysis & Metric Explanations
 # ============================================================================
 with tab2:
-    st.subheader(f"📊 Detailed Analysis: {selected_pipeline}")
+    st.subheader(f"Detailed Analysis: {selected_pipeline}")
     
     st.divider()
     
@@ -140,7 +157,7 @@ with tab2:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 🎨 Modality Generation Quality")
+        st.markdown("### Modality Generation Quality")
         
         if CSV_MODALITY_QUALITY.exists():
             df_modality = pd.read_csv(CSV_MODALITY_QUALITY)
@@ -159,7 +176,7 @@ with tab2:
             st.error("Modality quality CSV not found")
     
     with col2:
-        st.markdown("### 📋 Plan Coherence")
+        st.markdown("### Plan Coherence")
         
         if CSV_PLAN_COHERENCE.exists():
             df_plan = pd.read_csv(CSV_PLAN_COHERENCE)
@@ -182,7 +199,7 @@ with tab2:
     # -------------------------------------------------------------------------
     # Metric Explanations
     # -------------------------------------------------------------------------
-    st.markdown("### 📖 Metric Explanations")
+    st.markdown("### Metric Explanations")
     
     col1, col2 = st.columns(2)
     

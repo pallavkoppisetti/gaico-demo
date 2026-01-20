@@ -15,7 +15,7 @@ from utils.ui_components import display_footer
 # GAICo-style color palette
 GAICO_COLORS = px.colors.qualitative.Set2
 
-st.header("📊 Structured Data Evaluation")
+st.header("Structured Data Evaluation")
 
 st.markdown("""
 GAICo evaluates structured outputs like **planning sequences** and **time-series forecasts** 
@@ -25,10 +25,24 @@ using specialized metrics that preserve temporal ordering and sequential depende
 # ============================================================================
 # Data Type Selector (Outside tabs for consistency)
 # ============================================================================
+st.markdown("##### ⚙️ Configure Evaluation")
+
+with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
+    st.markdown("""
+    **You are selecting:** The type of structured data and a specific AI model to evaluate.
+    
+    | Component | Description |
+    |-----------|-------------|
+    | **📥 GAICo Inputs** | A *reference* sequence (ground truth) and a *generated* sequence from an AI model |
+    | **📤 GAICo Outputs** | Specialized metrics: **PlanningLCS** (order-preserving similarity), **PlanningJaccard** (set overlap), or **DTW** (time-series alignment) |
+    | **🎯 What this shows** | How accurately AI models can generate ordered action plans or predict future values |
+    """)
+
 data_type = st.radio(
     "Select Data Type",
-    ["🗺️ Planning Sequences", "📈 Time-Series Forecasts"],
-    horizontal=True
+    ["Planning Sequences", "Time-Series Forecasts"],
+    horizontal=True,
+    help="Choose the type of structured data to evaluate"
 )
 
 st.divider()
@@ -36,7 +50,7 @@ st.divider()
 # ============================================================================
 # PLANNING SEQUENCES
 # ============================================================================
-if data_type == "🗺️ Planning Sequences":
+if data_type == "Planning Sequences":
     
     if not CSV_PLANNING_METRICS.exists():
         st.error("Planning metrics CSV not found")
@@ -46,11 +60,13 @@ if data_type == "🗺️ Planning Sequences":
     models = df_planning['model_name'].unique().tolist()
     
     # Model selector
-    selected_model = st.selectbox("Select Model", models, key="planning_model")
+    selected_model = st.selectbox("Select Model", models, key="planning_model", help="Choose a model to view its planning evaluation")
     model_data = df_planning[df_planning['model_name'] == selected_model]
     
+    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    
     # Two-tab structure
-    tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+    tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
     
     # =========================================================================
     # TAB 1: Input + Visualization
@@ -66,7 +82,7 @@ if data_type == "🗺️ Planning Sequences":
         st.divider()
         
         # Input Section
-        st.markdown("### 📥 Input Data")
+        st.markdown("### Input Data")
         
         ref_text = model_data['reference_text'].iloc[0]
         gen_text = model_data['generated_text'].iloc[0]
@@ -88,7 +104,7 @@ if data_type == "🗺️ Planning Sequences":
         st.divider()
         
         # Visualization Section
-        st.markdown("### 📈 GAICo Visualization")
+        st.markdown("### GAICo Visualization")
         
         metrics = model_data['metric_name'].unique().tolist()
         
@@ -126,10 +142,10 @@ if data_type == "🗺️ Planning Sequences":
     # TAB 2: Scores & Analysis
     # =========================================================================
     with tab2:
-        st.subheader(f"📊 Detailed Analysis: {selected_model}")
+        st.subheader(f"Detailed Analysis: {selected_model}")
         
         # Metric Score Cards
-        st.markdown("### 🎯 Evaluation Scores")
+        st.markdown("### Evaluation Scores")
         
         cols = st.columns(4)
         for idx, (_, row) in enumerate(model_data.iterrows()):
@@ -146,7 +162,7 @@ if data_type == "🗺️ Planning Sequences":
         st.divider()
         
         # CSV Report Table
-        st.markdown("### 📋 Evaluation Report")
+        st.markdown("### Evaluation Report")
         
         metrics_df = model_data[['metric_name', 'score', 'passed_threshold', 'threshold_applied']].copy()
         metrics_df['score'] = metrics_df['score'].round(4)
@@ -169,7 +185,7 @@ if data_type == "🗺️ Planning Sequences":
         st.divider()
         
         # Metric Descriptions
-        st.markdown("### 📖 Metric Explanations")
+        st.markdown("### Metric Explanations")
         
         with st.expander("**PlanningLCS** (Longest Common Subsequence)"):
             st.markdown("""
@@ -210,11 +226,13 @@ else:
     models = df_timeseries['model_name'].unique().tolist()
     
     # Model selector
-    selected_model = st.selectbox("Select Model", models, key="timeseries_model")
+    selected_model = st.selectbox("Select Model", models, key="timeseries_model", help="Choose a model to view its time-series evaluation")
     model_data = df_timeseries[df_timeseries['model_name'] == selected_model]
     
+    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    
     # Two-tab structure
-    tab1, tab2 = st.tabs(["🎯 Input & Visualization", "📊 Scores & Analysis"])
+    tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
     
     # =========================================================================
     # TAB 1: Input + Visualization
@@ -230,7 +248,7 @@ else:
         st.divider()
         
         # Input Section
-        st.markdown("### 📥 Input Data")
+        st.markdown("### Input Data")
         
         ref_text = model_data['reference_text'].iloc[0]
         gen_text = model_data['generated_text'].iloc[0]
@@ -252,7 +270,7 @@ else:
         st.divider()
         
         # Visualization Section
-        st.markdown("### 📈 GAICo Visualization")
+        st.markdown("### GAICo Visualization")
         
         metrics = model_data['metric_name'].unique().tolist()
         
@@ -290,10 +308,10 @@ else:
     # TAB 2: Scores & Analysis
     # =========================================================================
     with tab2:
-        st.subheader(f"📊 Detailed Analysis: {selected_model}")
+        st.subheader(f"Detailed Analysis: {selected_model}")
         
         # Metric Score Cards
-        st.markdown("### 🎯 Evaluation Scores")
+        st.markdown("### Evaluation Scores")
         
         cols = st.columns(4)
         for idx, (_, row) in enumerate(model_data.iterrows()):
@@ -310,7 +328,7 @@ else:
         st.divider()
         
         # CSV Report Table
-        st.markdown("### 📋 Evaluation Report")
+        st.markdown("### Evaluation Report")
         
         metrics_df = model_data[['metric_name', 'score', 'passed_threshold', 'threshold_applied']].copy()
         metrics_df['score'] = metrics_df['score'].round(4)
@@ -333,7 +351,7 @@ else:
         st.divider()
         
         # Metric Descriptions
-        st.markdown("### 📖 Metric Explanations")
+        st.markdown("### Metric Explanations")
         
         with st.expander("**TimeSeriesElementDiff** (Point-by-Point)"):
             st.markdown("""

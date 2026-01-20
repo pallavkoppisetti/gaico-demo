@@ -60,14 +60,20 @@ STATS = {
 }
 
 # =============================================================================
-# CUSTOM CSS - Modify styling here
+# CUSTOM CSS - Consistent color coding for the application
 # =============================================================================
+# Color Guide:
+# - Reference/Input: Blue tones (#e8f4f8, #3b82f6)
+# - Generated/Output: Green tones (#e8f8e8, #10b981)
+# - Configuration: Purple tones (#667eea)
+# - Highlights/Results: Amber tones (#fef3c7, #f59e0b)
+
 CUSTOM_CSS = """
 <style>
     .main-header {
         font-size: 3rem;
         font-weight: bold;
-        color: #FF4B4B;
+        color: #667eea;
         text-align: center;
         margin-bottom: 0.5rem;
     }
@@ -76,6 +82,51 @@ CUSTOM_CSS = """
         text-align: center;
         color: #666;
         margin-bottom: 2rem;
+    }
+    
+    /* Consistent Input/Output color coding */
+    .input-section {
+        background-color: #e8f4f8;
+        border-left: 4px solid #3b82f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .output-section {
+        background-color: #e8f8e8;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .reference-box {
+        background-color: #e8f4f8;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #93c5fd;
+    }
+    .generated-box {
+        background-color: #e8f8e8;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #86efac;
+    }
+    
+    /* Configuration section styling */
+    .config-section {
+        background-color: #f3f4f6;
+        border-left: 4px solid #667eea;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Results highlight */
+    .results-highlight {
+        background-color: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        border-radius: 0.5rem;
     }
 </style>
 """

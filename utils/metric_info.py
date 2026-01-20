@@ -41,11 +41,11 @@ METRIC_INFO: Dict[str, Dict[str, str]] = {
         "interpretation": "Lower is better"
     },
     "Levenshtein": {
-        "name": "Levenshtein Distance",
+        "name": "Levenshtein Similarity",
         "category": "Text",
-        "description": "Normalized edit distance",
+        "description": "Normalized edit similarity (1 - normalized distance)",
         "range": "0.0 to 1.0",
-        "interpretation": "Lower is better"
+        "interpretation": "Higher is better"
     },
     "CosineSimilarity": {
         "name": "Cosine Similarity",
@@ -94,11 +94,11 @@ METRIC_INFO: Dict[str, Dict[str, str]] = {
         "interpretation": "Higher is better"
     },
     "AudioSpectrogramDistance": {
-        "name": "Spectrogram Distance",
+        "name": "Spectrogram Similarity",
         "category": "Audio",
-        "description": "Frequency representation difference",
+        "description": "Frequency representation similarity (converted from distance)",
         "range": "0.0 to 1.0",
-        "interpretation": "Lower is better"
+        "interpretation": "Higher is better"
     },
     
     # Planning Metrics
