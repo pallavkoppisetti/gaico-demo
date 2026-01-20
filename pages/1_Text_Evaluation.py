@@ -18,7 +18,7 @@ from utils.visualizations import display_plot
 # GAICo-style color palette
 GAICO_COLORS = px.colors.qualitative.Set2
 
-st.header("Text Evaluation Examples")
+st.header("Text Evaluation")
 
 text_data = load_text_examples()
 
@@ -34,18 +34,15 @@ from production use cases. Select an example to see the input data and correspon
 # ============================================================================
 # Example Selector (Outside tabs for consistency)
 # ============================================================================
-st.markdown("##### ⚙️ Configure Evaluation")
+st.markdown("""
+| Component | Description |
+|-----------|-------------|
+| **📥 GAICo Inputs** | Two text responses (a *reference* answer and a *generated* answer) from different LLMs |
+| **📤 GAICo Outputs** | Similarity scores (BLEU, ROUGE, BERTScore, etc.) measuring how closely the generated text matches the reference |
+| **🎯 What this shows** | How well one LLM's response aligns with another across multiple linguistic dimensions |
 
-with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
-    st.markdown("""
-    **You are selecting:** A pre-configured text comparison scenario.
-    
-    | Component | Description |
-    |-----------|-------------|
-    | **📥 GAICo Inputs** | Two text responses (a *reference* answer and a *generated* answer) from different LLMs |
-    | **📤 GAICo Outputs** | Similarity scores (BLEU, ROUGE, BERTScore, etc.) measuring how closely the generated text matches the reference |
-    | **🎯 What this shows** | How well one LLM's response aligns with another across multiple linguistic dimensions |
-    """)
+**You are selecting:** A pre-configured text comparison scenario.
+""")
 
 example_names = {ex["id"]: ex["name"] for ex in text_data["examples"]}
 selected_id = st.selectbox(
@@ -61,7 +58,11 @@ if not example:
     st.error("Example not found")
     st.stop()
 
-st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+st.markdown("""
+<div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+    <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+</div>
+""", unsafe_allow_html=True)
 
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
@@ -77,8 +78,7 @@ with tab1:
     
     if "question" in example.get("metadata", {}):
         st.info(f"**Question:** {example['metadata']['question']}")
-    
-    st.divider()
+
     
     # -------------------------------------------------------------------------
     # Input Section: Reference & Generated (Side by Side)
@@ -264,7 +264,7 @@ with tab2:
         # Download button for CSV
         csv_data = df_report.to_csv(index=False)
         st.download_button(
-            label="📥 Download Report (CSV)",
+            label="⬇️ Download Report (CSV)",
             data=csv_data,
             file_name=f"gaico_report_{selected_id}.csv",
             mime="text/csv"

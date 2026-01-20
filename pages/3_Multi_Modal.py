@@ -25,18 +25,15 @@ Select a modality and example to explore input data with corresponding visualiza
 # ============================================================================
 # Modality Selector (Outside tabs for consistency)
 # ============================================================================
-st.markdown("##### ⚙️ Configure Evaluation")
+st.markdown("""
+| Component | Description |
+|-----------|-------------|
+| **📥 GAICo Inputs** | A *reference* media file and one or more *generated* files from AI models |
+| **📤 GAICo Outputs** | Perceptual quality scores: **AudioSNR** & **SpectrogramDistance** for audio; **SSIM**, **AverageHash**, **HistogramMatch** for images |
+| **🎯 What this shows** | How faithfully AI-generated media reproduces the quality and characteristics of reference content |
 
-with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
-    st.markdown("""
-    **You are selecting:** The media type (audio or image) and specific comparison scenario.
-    
-    | Component | Description |
-    |-----------|-------------|
-    | **📥 GAICo Inputs** | A *reference* media file and one or more *generated* files from AI models |
-    | **📤 GAICo Outputs** | Perceptual quality scores: **AudioSNR** & **SpectrogramDistance** for audio; **SSIM**, **AverageHash**, **HistogramMatch** for images |
-    | **🎯 What this shows** | How faithfully AI-generated media reproduces the quality and characteristics of reference content |
-    """)
+**You are selecting:** The media type (audio or image) and specific comparison scenario.
+""")
 
 modality = st.radio(
     "Select Modality",
@@ -44,6 +41,12 @@ modality = st.radio(
     horizontal=True,
     help="Choose the media type to evaluate"
 )
+
+st.markdown("""
+    <div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+        <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+    </div>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
@@ -59,7 +62,7 @@ if modality == "🔊 Audio (TTS)":
     GAICo evaluates **AudioSNR** (signal-to-noise ratio) and **AudioSpectrogramDistance** (spectral similarity).
     """)
     
-    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+
     
     # Two-tab structure
     tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
@@ -159,7 +162,7 @@ if modality == "🔊 Audio (TTS)":
             # Download button
             csv_data = df_display.to_csv(index=False)
             st.download_button(
-                label="📥 Download Report (CSV)",
+                label="⬇️ Download Report (CSV)",
                 data=csv_data,
                 file_name="gaico_audio_evaluation.csv",
                 mime="text/csv"
@@ -217,7 +220,11 @@ else:
         csv_path = CSV_BASKETBALL
         title = "Basketball Team Image Quality"
     
-    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    st.markdown("""
+    <div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+        <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+    </div>
+    """, unsafe_allow_html=True)
     
     # Two-tab structure
     tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
@@ -307,7 +314,7 @@ else:
             # Download button
             csv_data = df_display.to_csv(index=False)
             st.download_button(
-                label="📥 Download Report (CSV)",
+                label="⬇️ Download Report (CSV)",
                 data=csv_data,
                 file_name=f"gaico_image_{image_example.lower().replace(' ', '_')}.csv",
                 mime="text/csv"

@@ -34,11 +34,11 @@ METRIC_INFO: Dict[str, Dict[str, str]] = {
         "interpretation": "Higher is better"
     },
     "JSD": {
-        "name": "Jensen-Shannon Divergence",
+        "name": "Jensen-Shannon Similarity",
         "category": "Text",
-        "description": "Word distribution difference",
+        "description": "Word distribution similarity (1 - divergence)",
         "range": "0.0 to 1.0",
-        "interpretation": "Lower is better"
+        "interpretation": "Higher is better"
     },
     "Levenshtein": {
         "name": "Levenshtein Similarity",

@@ -204,12 +204,12 @@ hook_col1, hook_col2 = st.columns([3, 2])
 with hook_col1:
     st.markdown("""
     <div class="hook-container">
-        <div class="hook-title">📝 Example: Comparing LLM Responses</div>
+        <div class="hook-title">Example: Comparing LLM Responses</div>
         <p style="color: #4b5563; font-size: 0.95rem; margin-bottom: 0.5rem;">
         <strong>Sample Question:</strong> <em>"How did DeepSeek train a model for $6M vs $100M for GPT-4?"</em><br/><br/>
-        <strong>📥 Inputs (what we feed to GAICo):</strong><br/>
+        <strong>Inputs (what we feed to GAICo):</strong><br/>
         &bull; Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question<br/><br/>
-        <strong>📤 Outputs (what GAICo produces):</strong><br/>
+        <strong>Outputs (what GAICo produces):</strong><br/>
         &bull; Similarity metrics comparing the responses (see radar chart →)<br/>
         &bull; Detailed scores available in the <strong>Scores & Analysis</strong> tab
         </p>
@@ -295,7 +295,7 @@ st.markdown("""
 st.divider()
 
 # Modality Cards
-st.markdown("### 🎨 Multi-Modal Evaluation")
+st.markdown("### Multi-Modal Evaluation")
 st.caption("One framework for all your GenAI evaluation needs")
 
 col1, col2, col3, col4 = st.columns(4)
@@ -354,12 +354,12 @@ col1, col2 = st.columns([1, 1])
 with col1:
     st.markdown("### Key Features")
     st.markdown("""
-    - ✅ **15+ Built-in Metrics** — BLEU, ROUGE, BERTScore, SSIM, DTW, and more
-    - ✅ **Extensible Architecture** — Easy to add custom metrics
-    - ✅ **Unified API** — Same interface across all modalities
-    - ✅ **Visualization Ready** — Built-in plotting functions
-    - ✅ **CSV Export** — Easy result sharing and analysis
-    - ✅ **Jupyter Support** — Works seamlessly in notebooks
+    - **15+ Built-in Metrics** — BLEU, ROUGE, BERTScore, SSIM, DTW, and more
+    - **Extensible Architecture** — Easy to add custom metrics
+    - **Unified API** — Same interface across all modalities
+    - **Visualization Ready** — Built-in plotting functions
+    - **CSV Export** — Easy result sharing and analysis
+    - **Jupyter Support** — Works seamlessly in notebooks
     """)
 
 with col2:

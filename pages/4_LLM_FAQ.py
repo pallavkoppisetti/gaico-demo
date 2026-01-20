@@ -36,18 +36,15 @@ df = pd.read_csv(csv_path)
 # ============================================================================
 # Question Selector (Outside tabs for consistency)
 # ============================================================================
-st.markdown("##### ⚙️ Configure Evaluation")
+st.markdown("""
+| Component | Description |
+|-----------|-------------|
+| **📥 GAICo Inputs** | Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question |
+| **📤 GAICo Outputs** | Multi-metric comparison: BLEU, ROUGE, BERTScore, Jaccard, Levenshtein, and more |
+| **🎯 What this shows** | How similarly (or differently) two state-of-the-art LLMs respond to the same prompt |
 
-with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
-    st.markdown("""
-    **You are selecting:** A FAQ question to see how two different LLMs answered it.
-    
-    | Component | Description |
-    |-----------|-------------|
-    | **📥 GAICo Inputs** | Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question |
-    | **📤 GAICo Outputs** | Multi-metric comparison: BLEU, ROUGE, BERTScore, Jaccard, Levenshtein, and more |
-    | **🎯 What this shows** | How similarly (or differently) two state-of-the-art LLMs respond to the same prompt |
-    """)
+**You are selecting:** A FAQ question to see how two different LLMs answered it.
+""")
 
 questions = df['question'].tolist()
 selected_q_idx = st.selectbox(
@@ -59,7 +56,11 @@ selected_q_idx = st.selectbox(
 
 selected_row = df.iloc[selected_q_idx]
 
-st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+st.markdown("""
+<div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+    <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+</div>
+""", unsafe_allow_html=True)
 
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
@@ -74,7 +75,7 @@ with tab1:
     
     st.markdown(f"**Question:** {selected_row['question']}")
     
-    st.divider()
+
     
     # -------------------------------------------------------------------------
     # Input Section: Side by Side Responses
@@ -108,7 +109,7 @@ with tab1:
             unsafe_allow_html=True
         )
     
-    st.divider()
+
     
     # -------------------------------------------------------------------------
     # Visualization Section
@@ -234,12 +235,12 @@ with tab2:
             - Counts insertions, deletions, substitutions
             """)
         
-        with st.expander("**JSD** (Jensen-Shannon Divergence)"):
+        with st.expander("**JSD** (Jensen-Shannon Similarity)"):
             st.markdown("""
-            - Distribution difference
-            - Range: 0.0 to 1.0 (**lower is better**)
+            - Distribution similarity
+            - Range: 0.0 to 1.0 (**higher is better**)
             - Best for: Probability distribution comparison
-            - Measures divergence between word distributions
+            - Measures similarity between word distributions
             """)
     
     st.divider()

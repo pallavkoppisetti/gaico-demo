@@ -20,26 +20,26 @@ GAICO_COLORS = px.colors.qualitative.Set2
 st.header("E2: AI Travel Assistant")
 
 st.markdown("""
-This case study demonstrates GAICo's ability to evaluate **composite AI systems** that 
-combine multiple specialist models. We evaluate 3 different travel assistant pipelines 
-that generate itineraries, images, and audio descriptions.
+This case study demonstrates GAICo's ability to evaluate **composite AI systems**—pipelines where 
+an orchestrator LLM coordinates specialist models for image and audio generation. Each pipeline 
+generates a 3-day Paris itinerary including: text descriptions, structured action sequences, 
+image prompts for text-to-image models, and scripts for TTS. GAICo evaluates both 
+**modality quality** (how well specialist models perform) and **plan coherence** (how accurately 
+the orchestrator produces structured outputs).
 """)
 
 # ============================================================================
 # Pipeline Selector (Outside tabs for consistency)
 # ============================================================================
-st.markdown("##### ⚙️ Configure Evaluation")
+st.markdown("""
+| Component | Description |
+|-----------|-------------|
+| **📥 GAICo Inputs** | Multi-modal outputs from each pipeline: text itinerary, activity sequence, image prompt, and audio script |
+| **📤 GAICo Outputs** | Cross-modality metrics comparing each pipeline's outputs against the reference |
+| **🎯 What this shows** | How GAICo can evaluate complex AI systems that produce multiple output types simultaneously |
 
-with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
-    st.markdown("""
-    **You are selecting:** An AI pipeline configuration (combination of LLM + image generator) and a day of the itinerary.
-    
-    | Component | Description |
-    |-----------|-------------|
-    | **📥 GAICo Inputs** | Multi-modal outputs from each pipeline: text itinerary, activity sequence, image prompt, and audio script |
-    | **📤 GAICo Outputs** | Cross-modality metrics comparing each pipeline's outputs against the reference |
-    | **🎯 What this shows** | How GAICo can evaluate complex AI systems that produce multiple output types simultaneously |
-    """)
+**You are selecting:** An AI pipeline configuration (combination of LLM + image generator) and a day of the itinerary.
+""")
 
 examples_dir = CASE_STUDY_DIR / "examples"
 
@@ -68,7 +68,11 @@ with open(json_path, 'r') as f:
 selected_day = st.radio("Select Day", [1, 2, 3], horizontal=True, help="Choose which day of the itinerary to view")
 day_data = data["trip_plan"][selected_day - 1]
 
-st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+st.markdown("""
+<div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+    <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+</div>
+""", unsafe_allow_html=True)
 
 # ============================================================================
 # Two-Tab Structure: Input+Viz | Scores+Details
@@ -85,8 +89,7 @@ with tab1:
     Each pipeline generates a 3-day Paris itinerary with structured output including:
     day plan text, activity sequence, budget, image prompt, and audio script.
     """)
-    
-    st.divider()
+
     
     # -------------------------------------------------------------------------
     # Input Section: Trip Planning Data

@@ -25,18 +25,15 @@ using specialized metrics that preserve temporal ordering and sequential depende
 # ============================================================================
 # Data Type Selector (Outside tabs for consistency)
 # ============================================================================
-st.markdown("##### ⚙️ Configure Evaluation")
+st.markdown("""
+| Component | Description |
+|-----------|-------------|
+| **📥 GAICo Inputs** | A *reference* sequence (ground truth) and a *generated* sequence from an AI model |
+| **📤 GAICo Outputs** | Specialized metrics: **PlanningLCS** (order-preserving similarity), **PlanningJaccard** (set overlap), or **DTW** (time-series alignment) |
+| **🎯 What this shows** | How accurately AI models can generate ordered action plans or predict future values |
 
-with st.expander("ℹ️ **What am I selecting?** (Click to expand)", expanded=False):
-    st.markdown("""
-    **You are selecting:** The type of structured data and a specific AI model to evaluate.
-    
-    | Component | Description |
-    |-----------|-------------|
-    | **📥 GAICo Inputs** | A *reference* sequence (ground truth) and a *generated* sequence from an AI model |
-    | **📤 GAICo Outputs** | Specialized metrics: **PlanningLCS** (order-preserving similarity), **PlanningJaccard** (set overlap), or **DTW** (time-series alignment) |
-    | **🎯 What this shows** | How accurately AI models can generate ordered action plans or predict future values |
-    """)
+**You are selecting:** The type of structured data and a specific AI model to evaluate.
+""")
 
 data_type = st.radio(
     "Select Data Type",
@@ -45,7 +42,6 @@ data_type = st.radio(
     help="Choose the type of structured data to evaluate"
 )
 
-st.divider()
 
 # ============================================================================
 # PLANNING SEQUENCES
@@ -59,11 +55,29 @@ if data_type == "Planning Sequences":
     df_planning = pd.read_csv(CSV_PLANNING_METRICS)
     models = df_planning['model_name'].unique().tolist()
     
+    # Model descriptions for planning
+    planning_model_info = {
+        "PerfectModel": "Exact match baseline",
+        "ReorderedModel": "Same actions, different order",
+        "IncompleteModel": "Missing some actions",
+        "ExtraActionModel": "Has extra actions not in reference"
+    }
+    
     # Model selector
-    selected_model = st.selectbox("Select Model", models, key="planning_model", help="Choose a model to view its planning evaluation")
+    selected_model = st.selectbox(
+        "Select Model",
+        models,
+        key="planning_model",
+        format_func=lambda x: f"{x} — {planning_model_info.get(x, '')}",
+        help="Choose a model to view its planning evaluation"
+    )
     model_data = df_planning[df_planning['model_name'] == selected_model]
     
-    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    st.markdown("""
+    <div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+        <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+    </div>
+    """, unsafe_allow_html=True)
     
     # Two-tab structure
     tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
@@ -176,7 +190,7 @@ if data_type == "Planning Sequences":
         # Download button
         csv_data = metrics_df.to_csv(index=False)
         st.download_button(
-            label="📥 Download Report (CSV)",
+            label="⬇️ Download Report (CSV)",
             data=csv_data,
             file_name=f"gaico_planning_{selected_model}.csv",
             mime="text/csv"
@@ -225,11 +239,29 @@ else:
     df_timeseries = pd.read_csv(CSV_TIMESERIES_METRICS)
     models = df_timeseries['model_name'].unique().tolist()
     
+    # Model descriptions for time-series
+    timeseries_model_info = {
+        "PerfectModel": "Exact match baseline",
+        "GoodValueModel": "Slightly off values (+1 each)",
+        "MissingPointModel": "Missing a time point",
+        "WrongKeyModel": "Wrong time key (t4 vs t3)"
+    }
+    
     # Model selector
-    selected_model = st.selectbox("Select Model", models, key="timeseries_model", help="Choose a model to view its time-series evaluation")
+    selected_model = st.selectbox(
+        "Select Model",
+        models,
+        key="timeseries_model",
+        format_func=lambda x: f"{x} — {timeseries_model_info.get(x, '')}",
+        help="Choose a model to view its time-series evaluation"
+    )
     model_data = df_timeseries[df_timeseries['model_name'] == selected_model]
     
-    st.info("📊 **The output of GAICo evaluation is below.** Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.")
+    st.markdown("""
+    <div style="text-align: center; background-color: #f8f9fa; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+        <strong>The output of GAICo evaluation is below.</strong> Use the tabs to switch between: (1) viewing inputs & visualization, or (2) detailed scores & analysis.
+    </div>
+    """, unsafe_allow_html=True)
     
     # Two-tab structure
     tab1, tab2 = st.tabs(["📥 Input & Visualization", "📤 Scores & Analysis"])
@@ -342,7 +374,7 @@ else:
         # Download button
         csv_data = metrics_df.to_csv(index=False)
         st.download_button(
-            label="📥 Download Report (CSV)",
+            label="⬇️ Download Report (CSV)",
             data=csv_data,
             file_name=f"gaico_timeseries_{selected_model}.csv",
             mime="text/csv"

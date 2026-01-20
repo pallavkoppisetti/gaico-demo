@@ -29,40 +29,35 @@ home_page = st.Page(
 )
 
 text_page = st.Page(
-    "pages/1_📝_Text_Evaluation.py",
-    title="Text Evaluation",
-    icon="📝"
+    "pages/1_Text_Evaluation.py",
+    title="Text Evaluation"
 )
 
 structured_page = st.Page(
-    "pages/2_📊_Structured_Data.py",
-    title="Structured Data",
-    icon="📊"
+    "pages/2_Structured_Data.py",
+    title="Structured Data"
 )
 
 multimodal_page = st.Page(
-    "pages/3_🎨_Multi_Modal.py",
-    title="Multi-Modal",
-    icon="🎨"
+    "pages/3_Multi_Modal.py",
+    title="Multi-Modal"
 )
 
 llm_faq_page = st.Page(
-    "pages/4_💬_LLM_FAQ.py",
-    title="E1: LLM FAQ",
-    icon="💬"
+    "pages/4_LLM_FAQ.py",
+    title="E1: LLM FAQ"
 )
 
 travel_page = st.Page(
-    "pages/5_✈️_Travel_Assistant.py",
-    title="E2: Travel Assistant",
-    icon="✈️"
+    "pages/5_Travel_Assistant.py",
+    title="E2: Travel Assistant"
 )
 
 # Set up navigation with hidden default menu (we'll build our own)
 pg = st.navigation(
     {
         "": [home_page],
-        "Demos": [text_page, structured_page, multimodal_page, llm_faq_page, travel_page]
+        "Use Cases": [text_page, structured_page, multimodal_page, llm_faq_page, travel_page]
     },
     position="hidden"
 )
@@ -78,24 +73,24 @@ with st.sidebar:
     # Custom navigation menu
     st.page_link(home_page, label="Home", icon="🏠")
     
-    st.markdown("**Demos**")
-    st.page_link(text_page, label="Text Evaluation", icon="📝")
-    st.page_link(structured_page, label="Structured Data", icon="📊")
-    st.page_link(multimodal_page, label="Multi-Modal", icon="🎨")
-    st.page_link(llm_faq_page, label="E1: LLM FAQ", icon="💬")
-    st.page_link(travel_page, label="E2: Travel Assistant", icon="✈️")
+    st.markdown("**Use Cases**")
+    st.page_link(text_page, label="Text Evaluation")
+    st.page_link(structured_page, label="Structured Data")
+    st.page_link(multimodal_page, label="Multi-Modal")
+    st.page_link(llm_faq_page, label="E1: LLM FAQ")
+    st.page_link(travel_page, label="E2: Travel Assistant")
     
     st.divider()
     
     # Links section
-    st.markdown("### 🔗 Links")
-    st.markdown(f"[📦 GitHub]({GITHUB_URL})")
-    st.markdown(f"[🐍 PyPI]({PYPI_URL})")
-    st.markdown(f"[📚 Docs]({DOCS_URL})")
-    st.markdown("[📄 Demo Paper](https://ai4society.github.io/publications/papers_local/GAICO-Demo-AAAI2026.pdf)")
+    st.markdown("### Links")
+    st.markdown(f"[GitHub]({GITHUB_URL})")
+    st.markdown(f"[PyPI]({PYPI_URL})")
+    st.markdown(f"[Docs]({DOCS_URL})")
+    st.markdown("[Demo Paper](https://ai4society.github.io/publications/papers_local/GAICO-Demo-AAAI2026.pdf)")
     st.divider()
-    st.caption(f"📅 {CONFERENCE}")
-    st.caption(f"🏛️ {INSTITUTION}")
+    st.caption(f"{CONFERENCE}")
+    st.caption(f"{INSTITUTION}")
 
 # Run the selected page
 pg.run()
