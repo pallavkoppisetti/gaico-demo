@@ -368,13 +368,16 @@ with col2:
 
 exp = Experiment(
     llm_responses={
-        "GPT-4": response1,
-        "Claude": response2
+        "GPT-4": "The capital of France is Paris.",
+        "Claude": "Paris is the capital of France."
     },
-    reference_answer=ground_truth
+    reference_answer="Paris is the capital of France."
 )
 
-results = exp.compare(plot=True)
+results = exp.compare(
+    metrics=["Jaccard", "ROUGE", "BERTScore"],
+    plot=True
+)
     """, language="python")
 
 # Footer
