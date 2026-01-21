@@ -83,7 +83,7 @@ with st.sidebar:
     st.divider()
     
     # Links section
-    st.markdown("### Links")
+    st.markdown("### 🔗 Links")
     st.markdown(f"[GitHub]({GITHUB_URL})")
     st.markdown(f"[PyPI]({PYPI_URL})")
     st.markdown(f"[Docs]({DOCS_URL})")

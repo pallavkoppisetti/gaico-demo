@@ -211,7 +211,7 @@ with hook_col1:
         &bull; Two LLM responses (DeepSeek R1 and Llama 3.3) answering the same question<br/><br/>
         <strong>Outputs (what GAICo produces):</strong><br/>
         &bull; Similarity metrics comparing the responses (see radar chart →)<br/>
-        &bull; Detailed scores available in the <strong>Scores & Analysis</strong> tab
+        &bull; Detailed scores in the <strong>Scores & Analysis</strong> tab: numeric values, pass/fail thresholds, CSV export, and metric explanations
         </p>
     </div>
     """, unsafe_allow_html=True)
